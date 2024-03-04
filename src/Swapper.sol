@@ -22,15 +22,15 @@ contract Swapper is PriceProvider {
                         CONSTRUCTOR & MODIFIERS
     //////////////////////////////////////////////////////////////*/
 
-    /// @dev Modifier to wrap incoming Ether into WETH (Wrapped Ether)
+    /// @dev Modifier to wrap incoming Ether into wETH (Wrapped Ether)
     modifier wrapEther() {
-        WETH.deposit{value: msg.value}();
+        wETH.deposit{value: msg.value}();
         _;
     }
 
     /// @dev Constructor for initializing the Swapper contract
     /// @dev The constructor calls the constructor of the PriceProvider contract
-    /// @param _weth The address of the WETH (Wrapped Ether) contract
+    /// @param _weth The address of the wETH (Wrapped Ether) contract
     /// @param _secondsAgo The number of seconds ago to use for fetching historical prices
     constructor(
         address _weth,
@@ -47,11 +47,11 @@ contract Swapper is PriceProvider {
     function swapEtherToToken(
         address token,
         uint256 minAmount
-    ) public payable wrapEther returns (uint) {
+    ) external payable wrapEther returns (uint) {
         return
             SWAP_ROUTER.exactInputSingle(
                 ISwapRouter.ExactInputSingleParams({
-                    tokenIn: address(WETH),
+                    tokenIn: address(wETH),
                     tokenOut: token,
                     fee: 3000, // 0.3% fee
                     recipient: msg.sender,

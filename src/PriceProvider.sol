@@ -18,8 +18,8 @@ contract PriceProvider {
     /// @dev https://docs.uniswap.org/contracts/v3/reference/deployments#goerli-addresses
     address constant FACTORY = 0x1F98431c8aD98523631AE4a59f267346ea31F984;
 
-    /// @dev Wrapped Ether (WETH) contract instance
-    WETH9 immutable WETH;
+    /// @dev Wrapped Ether (wETH) contract instance
+    WETH9 immutable wETH;
 
     /// @dev Time interval in seconds for TWAP calculation
     uint32 immutable secondsAgo; // 8 hours
@@ -38,10 +38,10 @@ contract PriceProvider {
     //////////////////////////////////////////////////////////////*/
 
     /// @dev Constructor to initialize the PriceProvider contract
-    /// @param _weth Address of the Wrapped Ether (WETH) contract
+    /// @param _weth Address of the Wrapped Ether (wETH) contract
     /// @param _secondsAgo Time interval in seconds for TWAP calculation
     constructor(address _weth, uint16 _secondsAgo) {
-        WETH = WETH9(_weth);
+        wETH = WETH9(_weth);
         secondsAgo = _secondsAgo;
     }
 
@@ -59,7 +59,7 @@ contract PriceProvider {
     ) external view returns (uint256 amountOut) {
         address pool = IUniswapV3Factory(FACTORY).getPool(
             tokenOut,
-            address(WETH),
+            address(wETH),
             FEE
         );
 
@@ -71,7 +71,7 @@ contract PriceProvider {
         amountOut = OracleLibrary.getQuoteAtTick(
             tick,
             amountIn,
-            address(WETH),
+            address(wETH),
             tokenOut
         );
     }

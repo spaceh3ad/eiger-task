@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.18;
 
 import {Proxy} from "./Proxy.sol";
 
@@ -19,7 +19,7 @@ contract Multisig {
     uint32 public lastUpgradeTimestamp;
 
     /// @dev Minimum required signatures for actions.
-    uint8 public threshold;
+    uint8 immutable threshold;
 
     /// @dev Count of approvals for the current upgrade.
     uint8 private approvalCount;
@@ -31,7 +31,7 @@ contract Multisig {
     uint16 private currentProposalVersion;
 
     /// @dev Instance of the Proxy contract.
-    Proxy public proxy;
+    Proxy public immutable proxy;
 
     /// @dev Address of the new contract for upgrades.
     address public newContract;
@@ -69,12 +69,15 @@ contract Multisig {
     //////////////////////////////////////////////////////////////*/
     /// @dev Emitted when an upgrade is successfully executed.
     /// @param newContract Address of the new contract to which the proxy was upgraded.
-    event Upgrade(address newContract);
+    event Upgrade(address indexed newContract);
 
     /// @dev Emitted when a new upgrade proposal is made.
     /// @param proposedContract Address of the contract proposed for upgrade.
     /// @param proposalVersion Version of the proposal made.
-    event UpgradeProposed(address proposedContract, uint256 proposalVersion);
+    event UpgradeProposed(
+        address indexed proposedContract,
+        uint256 indexed proposalVersion
+    );
 
     /*//////////////////////////////////////////////////////////////
                         CONSTRUCTOR & MODIFIERS
