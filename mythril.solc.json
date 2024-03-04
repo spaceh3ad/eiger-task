@@ -1,0 +1,7 @@
+{
+    "remappings": [
+        "@uniswap/v3-periphery/=lib/v3-periphery/",
+        "@uniswap/v3-core/=lib/v3-core/"
+    ],
+    "solcVersion": "0.8.0"
+}
